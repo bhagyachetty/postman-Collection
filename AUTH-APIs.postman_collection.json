@@ -1,0 +1,76 @@
+{
+	"info": {
+		"_postman_id": "d49e7eb4-c673-4e2c-9456-911e8745a8f8",
+		"name": "AUTH-APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5040522",
+		"_collection_link": "https://kiranmm.postman.co/workspace/9PM-BATCH~4adf4ee7-9b42-4d28-9f7f-942f3a3a75ad/collection/5040522-d49e7eb4-c673-4e2c-9456-911e8745a8f8?action=share&source=collection_link&creator=5040522"
+	},
+	"item": [
+		{
+			"name": "BASIC AUTH API",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "passwd",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "user",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/basic-auth/user/passwd",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"basic-auth",
+						"user",
+						"passwd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BEARER TOKEN API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer 12345",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://httpbin.org/bearer",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"bearer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

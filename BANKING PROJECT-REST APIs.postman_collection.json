@@ -1,0 +1,4105 @@
+{
+	"info": {
+		"_postman_id": "60020f95-e0ea-4aa1-927a-9961528bf180",
+		"name": "BANKING PROJECT-REST APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5040522",
+		"_collection_link": "https://kiranmm.postman.co/workspace/9PM-BATCH~4adf4ee7-9b42-4d28-9f7f-942f3a3a75ad/collection/5040522-60020f95-e0ea-4aa1-927a-9961528bf180?action=share&source=collection_link&creator=5040522"
+	},
+	"item": [
+		{
+			"name": "SMOKE TESTING",
+			"item": [
+				{
+					"name": "LOGIN MODULE",
+					"item": [
+						{
+							"name": "LOGIN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Authorization & success\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authorization\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"jsmith is now logged in\");\r",
+											"});\r",
+											"\r",
+											"// below is the API chaining automation code\r",
+											"\r",
+											"var extractedBody = pm.response.json();\r",
+											"var extractedAuthorization = extractedBody.Authorization;\r",
+											"pm.globals.set(\"globalAuthorization\", extractedAuthorization);\r",
+											"\r",
+											"// finding the data-type\r",
+											"console.log(\"The data-type of Authorization is \"+typeof(pm.response.json().Authorization));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"jsmith\",\r\n    \"password\": \"demo1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "VERIFY IF USER IS LOGGED IN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.loggedin).to.eql(\"true\");\r",
+											"});\r",
+											"\r",
+											"// capturing the response attributes from server\r",
+											"\r",
+											"console.log(\"The response code is \"+pm.response.code);\r",
+											"console.log(\"The response message is \"+pm.response.status);\r",
+											"console.log(\"The response code & message is \"+pm.response.code+\" \"+pm.response.status);\r",
+											"console.log(\"The response time is \"+pm.response.responseTime+\" ms\");\r",
+											"console.log(\"The response size is \");\r",
+											"console.log(pm.response.size());\r",
+											"console.log(\"The response body size is \"+pm.response.size().body);\r",
+											"console.log(\"The response headers size is \"+pm.response.size().header);\r",
+											"console.log(\"The response body received in JSON format is \");\r",
+											"console.log(pm.response.json());\r",
+											"console.log(\"The response body received in TEXT format is \");\r",
+											"console.log(pm.response.text());\r",
+											"console.log(\"The response headers received are \");\r",
+											"console.log(pm.response.headers);\r",
+											"console.log(pm.response.headers.get(\"Content-Type\"));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ACCOUNTS MODULE",
+					"item": [
+						{
+							"name": "GET ACCOUNTS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Accounts, Name, id\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Accounts\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"Name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.Accounts[0].Name).to.eql(\"Savings\");\r",
+											"    pm.expect(jsonData.Accounts[1].Name).to.eql(\"Checking\");\r",
+											"    pm.expect(jsonData.Accounts[2].Name).to.eql(\"Credit Card\");\r",
+											"\r",
+											"    pm.expect(jsonData.Accounts[0].id).to.eql(\"800002\");\r",
+											"    pm.expect(jsonData.Accounts[1].id).to.eql(\"800003\");\r",
+											"    pm.expect(jsonData.Accounts[2].id).to.eql(\"4539082039396288\");\r",
+											"});\r",
+											"\r",
+											"// finding data-types and printing them on console\r",
+											"\r",
+											"// console.log(\"Hello World\");\r",
+											"console.log(\"The data-type of id field is \"+typeof(pm.response.json().Accounts[0].id));\r",
+											"\r",
+											"// console.log(typeof(pm.response.json().Accounts[0].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[1].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[2].id));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ACCOUNT SPECIFIC DETAILS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"accountId\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"balance\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"credits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"debits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET LAST 10 TRANSACTIONS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"transactions\");\r",
+											"});\r",
+											"\r",
+											"// capture request attributes & print them\r",
+											"\r",
+											"console.log(\"The HTTP method used is \"+pm.request.method);\r",
+											"console.log(\"The API URL used is \"+pm.request.url);\r",
+											"console.log(\"The request headers used in this API request are \");\r",
+											"console.log(pm.request.headers);\r",
+											"console.log(\"The request body/payload used in the API request is \");\r",
+											"console.log(pm.request.body);\r",
+											"console.log(\"The API request size sent to server is \");\r",
+											"console.log(pm.request.size());\r",
+											"console.log(\"The request body size is \"+pm.request.size().body);\r",
+											"console.log(\"The request headers size is \"+pm.request.size().header);\r",
+											"console.log(\"The API request name is \"+pm.info.requestName);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-01-01\",\r\n    \"endDate\": \"2024-09-17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRANSFER MODULE",
+					"item": [
+						{
+							"name": "TRANSFER AMOUNT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"successfully transferred\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FEEDBACK MODULE",
+					"item": [
+						{
+							"name": "SUBMIT FEEDBACK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"comments\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"subject\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Kiran\",\r\n    \"email\": \"kiran@altoromutual.com\",\r\n    \"subject\": \"Money transfer\",\r\n    \"message\": \"The transfer process is real quick and a nice feature\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ADMIN MODULE",
+					"item": [
+						{
+							"name": "ADD NEW USER",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"Shiva\",\r\n    \"lastname\": \"Vishnu\",\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"S3l3ctS0methingStr0ng5AsP@ssword\",\r\n    \"password2\": \"S3l3ctS0methingStr0ng5AsP@ssword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/addUser",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addUser"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CHANGE PASSWORD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"Admin!23\",\r\n    \"password2\": \"Admin!23\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/changePassword",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGOUT MODULE",
+					"item": [
+						{
+							"name": "LOGOUT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.LoggedOut).to.eql(\"True\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/logout",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "DDT-FUNCTIONS",
+			"item": [
+				{
+					"name": "LOGIN MODULE",
+					"item": [
+						{
+							"name": "LOGIN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Authorization & success\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authorization\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"jsmith is now logged in\");\r",
+											"});\r",
+											"\r",
+											"// below is the API chaining automation code\r",
+											"\r",
+											"var extractedBody = pm.response.json();\r",
+											"var extractedAuthorization = extractedBody.Authorization;\r",
+											"pm.globals.set(\"globalAuthorization\", extractedAuthorization);\r",
+											"\r",
+											"// finding the data-type\r",
+											"console.log(\"The data-type of Authorization is \"+typeof(pm.response.json().Authorization));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"jsmith\",\r\n    \"password\": \"demo1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "VERIFY IF USER IS LOGGED IN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.loggedin).to.eql(\"true\");\r",
+											"});\r",
+											"\r",
+											"// capturing the response attributes from server\r",
+											"\r",
+											"console.log(\"The response code is \"+pm.response.code);\r",
+											"console.log(\"The response message is \"+pm.response.status);\r",
+											"console.log(\"The response code & message is \"+pm.response.code+\" \"+pm.response.status);\r",
+											"console.log(\"The response time is \"+pm.response.responseTime+\" ms\");\r",
+											"console.log(\"The response size is \");\r",
+											"console.log(pm.response.size());\r",
+											"console.log(\"The response body size is \"+pm.response.size().body);\r",
+											"console.log(\"The response headers size is \"+pm.response.size().header);\r",
+											"console.log(\"The response body received in JSON format is \");\r",
+											"console.log(pm.response.json());\r",
+											"console.log(\"The response body received in TEXT format is \");\r",
+											"console.log(pm.response.text());\r",
+											"console.log(\"The response headers received are \");\r",
+											"console.log(pm.response.headers);\r",
+											"console.log(pm.response.headers.get(\"Content-Type\"));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ACCOUNTS MODULE",
+					"item": [
+						{
+							"name": "GET ACCOUNTS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Accounts, Name, id\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Accounts\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"Name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.Accounts[0].Name).to.eql(\"Savings\");\r",
+											"    pm.expect(jsonData.Accounts[1].Name).to.eql(\"Checking\");\r",
+											"    pm.expect(jsonData.Accounts[2].Name).to.eql(\"Credit Card\");\r",
+											"\r",
+											"    pm.expect(jsonData.Accounts[0].id).to.eql(\"800002\");\r",
+											"    pm.expect(jsonData.Accounts[1].id).to.eql(\"800003\");\r",
+											"    pm.expect(jsonData.Accounts[2].id).to.eql(\"4539082039396288\");\r",
+											"});\r",
+											"\r",
+											"// finding data-types and printing them on console\r",
+											"\r",
+											"// console.log(\"Hello World\");\r",
+											"console.log(\"The data-type of id field is \"+typeof(pm.response.json().Accounts[0].id));\r",
+											"\r",
+											"// console.log(typeof(pm.response.json().Accounts[0].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[1].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[2].id));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ACCOUNT SPECIFIC DETAILS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"accountId\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"balance\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"credits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"debits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET LAST 10 TRANSACTIONS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"transactions\");\r",
+											"});\r",
+											"\r",
+											"// capture request attributes & print them\r",
+											"\r",
+											"console.log(\"The HTTP method used is \"+pm.request.method);\r",
+											"console.log(\"The API URL used is \"+pm.request.url);\r",
+											"console.log(\"The request headers used in this API request are \");\r",
+											"console.log(pm.request.headers);\r",
+											"console.log(\"The request body/payload used in the API request is \");\r",
+											"console.log(pm.request.body);\r",
+											"console.log(\"The API request size sent to server is \");\r",
+											"console.log(pm.request.size());\r",
+											"console.log(\"The request body size is \"+pm.request.size().body);\r",
+											"console.log(\"The request headers size is \"+pm.request.size().header);\r",
+											"console.log(\"The API request name is \"+pm.info.requestName);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-01-01\",\r\n    \"endDate\": \"2024-09-17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRANSFER MODULE",
+					"item": [
+						{
+							"name": "TRANSFER AMOUNT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"successfully transferred\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"{{$randomInt}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FEEDBACK MODULE",
+					"item": [
+						{
+							"name": "SUBMIT FEEDBACK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"comments\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"subject\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"{{$randomFullName}}\",\r\n    \"email\": \"{{$randomEmail}}\",\r\n    \"subject\": \"{{$randomWords}}\",\r\n    \"message\": \"{{$randomLoremWords}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ADMIN MODULE",
+					"item": [
+						{
+							"name": "ADD NEW USER",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{$randomUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"{{$randomFirstName}}\",\r\n    \"lastname\": \"{{$randomLastName}}\",\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"password1\": \"S3l3ctS0methingStr0ng5AsP@ssword\",\r\n    \"password2\": \"S3l3ctS0methingStr0ng5AsP@ssword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/addUser",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addUser"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CHANGE PASSWORD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{$randomUserName}}\",\r\n    \"password1\": \"Admin!23\",\r\n    \"password2\": \"Admin!23\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/changePassword",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGOUT MODULE",
+					"item": [
+						{
+							"name": "LOGOUT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.LoggedOut).to.eql(\"True\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/logout",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "INTEROPERABILITY TESTING",
+			"item": [
+				{
+					"name": "LOGIN MODULE-Windows OS + Edge",
+					"item": [
+						{
+							"name": "LOGIN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Authorization & success\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authorization\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"jsmith is now logged in\");\r",
+											"});\r",
+											"\r",
+											"// below is the API chaining automation code\r",
+											"\r",
+											"var extractedBody = pm.response.json();\r",
+											"var extractedAuthorization = extractedBody.Authorization;\r",
+											"pm.globals.set(\"globalAuthorization\", extractedAuthorization);\r",
+											"\r",
+											"// finding the data-type\r",
+											"console.log(\"The data-type of Authorization is \"+typeof(pm.response.json().Authorization));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/128.0.2739.90",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"jsmith\",\r\n    \"password\": \"demo1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "VERIFY IF USER IS LOGGED IN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.loggedin).to.eql(\"true\");\r",
+											"});\r",
+											"\r",
+											"// capturing the response attributes from server\r",
+											"\r",
+											"console.log(\"The response code is \"+pm.response.code);\r",
+											"console.log(\"The response message is \"+pm.response.status);\r",
+											"console.log(\"The response code & message is \"+pm.response.code+\" \"+pm.response.status);\r",
+											"console.log(\"The response time is \"+pm.response.responseTime+\" ms\");\r",
+											"console.log(\"The response size is \");\r",
+											"console.log(pm.response.size());\r",
+											"console.log(\"The response body size is \"+pm.response.size().body);\r",
+											"console.log(\"The response headers size is \"+pm.response.size().header);\r",
+											"console.log(\"The response body received in JSON format is \");\r",
+											"console.log(pm.response.json());\r",
+											"console.log(\"The response body received in TEXT format is \");\r",
+											"console.log(pm.response.text());\r",
+											"console.log(\"The response headers received are \");\r",
+											"console.log(pm.response.headers);\r",
+											"console.log(pm.response.headers.get(\"Content-Type\"));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36 Edg/128.0.2739.90",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ACCOUNTS MODULE-Linux OS + Firefox",
+					"item": [
+						{
+							"name": "GET ACCOUNTS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Accounts, Name, id\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Accounts\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"Name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.Accounts[0].Name).to.eql(\"Savings\");\r",
+											"    pm.expect(jsonData.Accounts[1].Name).to.eql(\"Checking\");\r",
+											"    pm.expect(jsonData.Accounts[2].Name).to.eql(\"Credit Card\");\r",
+											"\r",
+											"    pm.expect(jsonData.Accounts[0].id).to.eql(\"800002\");\r",
+											"    pm.expect(jsonData.Accounts[1].id).to.eql(\"800003\");\r",
+											"    pm.expect(jsonData.Accounts[2].id).to.eql(\"4539082039396288\");\r",
+											"});\r",
+											"\r",
+											"// finding data-types and printing them on console\r",
+											"\r",
+											"// console.log(\"Hello World\");\r",
+											"console.log(\"The data-type of id field is \"+typeof(pm.response.json().Accounts[0].id));\r",
+											"\r",
+											"// console.log(typeof(pm.response.json().Accounts[0].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[1].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[2].id));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (X11; Linux i686; rv:130.0) Gecko/20100101 Firefox/130.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ACCOUNT SPECIFIC DETAILS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"accountId\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"balance\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"credits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"debits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (X11; Linux i686; rv:130.0) Gecko/20100101 Firefox/130.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET LAST 10 TRANSACTIONS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (X11; Linux i686; rv:130.0) Gecko/20100101 Firefox/130.0",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"transactions\");\r",
+											"});\r",
+											"\r",
+											"// capture request attributes & print them\r",
+											"\r",
+											"console.log(\"The HTTP method used is \"+pm.request.method);\r",
+											"console.log(\"The API URL used is \"+pm.request.url);\r",
+											"console.log(\"The request headers used in this API request are \");\r",
+											"console.log(pm.request.headers);\r",
+											"console.log(\"The request body/payload used in the API request is \");\r",
+											"console.log(pm.request.body);\r",
+											"console.log(\"The API request size sent to server is \");\r",
+											"console.log(pm.request.size());\r",
+											"console.log(\"The request body size is \"+pm.request.size().body);\r",
+											"console.log(\"The request headers size is \"+pm.request.size().header);\r",
+											"console.log(\"The API request name is \"+pm.info.requestName);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (X11; Linux i686; rv:130.0) Gecko/20100101 Firefox/130.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-01-01\",\r\n    \"endDate\": \"2024-09-17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRANSFER MODULE-Mac OS + Safari",
+					"item": [
+						{
+							"name": "TRANSFER AMOUNT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"successfully transferred\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Macintosh; Intel Mac OS X 14_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Safari/605.1.15",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FEEDBACK MODULE",
+					"item": [
+						{
+							"name": "SUBMIT FEEDBACK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"comments\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"subject\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Kiran\",\r\n    \"email\": \"kiran@altoromutual.com\",\r\n    \"subject\": \"Money transfer\",\r\n    \"message\": \"The transfer process is real quick and a nice feature\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ADMIN MODULE",
+					"item": [
+						{
+							"name": "ADD NEW USER",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"Shiva\",\r\n    \"lastname\": \"Vishnu\",\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"S3l3ctS0methingStr0ng5AsP@ssword\",\r\n    \"password2\": \"S3l3ctS0methingStr0ng5AsP@ssword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/addUser",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addUser"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CHANGE PASSWORD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"Admin!23\",\r\n    \"password2\": \"Admin!23\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/changePassword",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGOUT MODULE-Windows OS + Chrome",
+					"item": [
+						{
+							"name": "LOGOUT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.LoggedOut).to.eql(\"True\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/logout",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "INTEROPERABILITY TESTING-DDT",
+			"item": [
+				{
+					"name": "LOGIN MODULE",
+					"item": [
+						{
+							"name": "LOGIN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Authorization & success\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Authorization\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"jsmith is now logged in\");\r",
+											"});\r",
+											"\r",
+											"// below is the API chaining automation code\r",
+											"\r",
+											"var extractedBody = pm.response.json();\r",
+											"var extractedAuthorization = extractedBody.Authorization;\r",
+											"pm.globals.set(\"globalAuthorization\", extractedAuthorization);\r",
+											"\r",
+											"// finding the data-type\r",
+											"console.log(\"The data-type of Authorization is \"+typeof(pm.response.json().Authorization));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"jsmith\",\r\n    \"password\": \"demo1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "VERIFY IF USER IS LOGGED IN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.loggedin).to.eql(\"true\");\r",
+											"});\r",
+											"\r",
+											"// capturing the response attributes from server\r",
+											"\r",
+											"console.log(\"The response code is \"+pm.response.code);\r",
+											"console.log(\"The response message is \"+pm.response.status);\r",
+											"console.log(\"The response code & message is \"+pm.response.code+\" \"+pm.response.status);\r",
+											"console.log(\"The response time is \"+pm.response.responseTime+\" ms\");\r",
+											"console.log(\"The response size is \");\r",
+											"console.log(pm.response.size());\r",
+											"console.log(\"The response body size is \"+pm.response.size().body);\r",
+											"console.log(\"The response headers size is \"+pm.response.size().header);\r",
+											"console.log(\"The response body received in JSON format is \");\r",
+											"console.log(pm.response.json());\r",
+											"console.log(\"The response body received in TEXT format is \");\r",
+											"console.log(pm.response.text());\r",
+											"console.log(\"The response headers received are \");\r",
+											"console.log(pm.response.headers);\r",
+											"console.log(pm.response.headers.get(\"Content-Type\"));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"user-agent": true
+								}
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ACCOUNTS MODULE",
+					"item": [
+						{
+							"name": "GET ACCOUNTS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains Accounts, Name, id\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"Accounts\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"Name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"id\");\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if the response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.Accounts[0].Name).to.eql(\"Savings\");\r",
+											"    pm.expect(jsonData.Accounts[1].Name).to.eql(\"Checking\");\r",
+											"    pm.expect(jsonData.Accounts[2].Name).to.eql(\"Credit Card\");\r",
+											"\r",
+											"    pm.expect(jsonData.Accounts[0].id).to.eql(\"800002\");\r",
+											"    pm.expect(jsonData.Accounts[1].id).to.eql(\"800003\");\r",
+											"    pm.expect(jsonData.Accounts[2].id).to.eql(\"4539082039396288\");\r",
+											"});\r",
+											"\r",
+											"// finding data-types and printing them on console\r",
+											"\r",
+											"// console.log(\"Hello World\");\r",
+											"console.log(\"The data-type of id field is \"+typeof(pm.response.json().Accounts[0].id));\r",
+											"\r",
+											"// console.log(typeof(pm.response.json().Accounts[0].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[1].id));\r",
+											"// console.log(typeof(pm.response.json().Accounts[2].id));"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ACCOUNT SPECIFIC DETAILS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"accountId\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"balance\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"credits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"debits\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET LAST 10 TRANSACTIONS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"last_10_transactions\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"transactions\");\r",
+											"});\r",
+											"\r",
+											"// capture request attributes & print them\r",
+											"\r",
+											"console.log(\"The HTTP method used is \"+pm.request.method);\r",
+											"console.log(\"The API URL used is \"+pm.request.url);\r",
+											"console.log(\"The request headers used in this API request are \");\r",
+											"console.log(pm.request.headers);\r",
+											"console.log(\"The request body/payload used in the API request is \");\r",
+											"console.log(pm.request.body);\r",
+											"console.log(\"The API request size sent to server is \");\r",
+											"console.log(pm.request.size());\r",
+											"console.log(\"The request body size is \"+pm.request.size().body);\r",
+											"console.log(\"The request headers size is \"+pm.request.size().header);\r",
+											"console.log(\"The API request name is \"+pm.info.requestName);"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-01-01\",\r\n    \"endDate\": \"2024-09-17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRANSFER MODULE",
+					"item": [
+						{
+							"name": "TRANSFER AMOUNT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"success\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"successfully transferred\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"5\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FEEDBACK MODULE",
+					"item": [
+						{
+							"name": "SUBMIT FEEDBACK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body contains mandatory fields\", function () {\r",
+											"    pm.expect(pm.response.text()).to.include(\"comments\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"subject\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+											"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Kiran\",\r\n    \"email\": \"kiran@altoromutual.com\",\r\n    \"subject\": \"Money transfer\",\r\n    \"message\": \"The transfer process is real quick and a nice feature\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ADMIN MODULE",
+					"item": [
+						{
+							"name": "ADD NEW USER",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"Shiva\",\r\n    \"lastname\": \"Vishnu\",\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"S3l3ctS0methingStr0ng5AsP@ssword\",\r\n    \"password2\": \"S3l3ctS0methingStr0ng5AsP@ssword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/addUser",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addUser"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CHANGE PASSWORD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.success).to.eql(\"Requested operation has completed successfully.\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"Admin!23\",\r\n    \"password2\": \"Admin!23\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/changePassword",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGOUT MODULE",
+					"item": [
+						{
+							"name": "LOGOUT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {\r",
+											"    pm.response.to.have.status(200);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Response time is less than 1000ms\", function () {\r",
+											"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"Verify if response body is valid\", function () {\r",
+											"    var jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.LoggedOut).to.eql(\"True\");\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "{{globalAuthorization}}",
+										"type": "text"
+									},
+									{
+										"key": "User-Agent",
+										"value": "{{varUserAgent}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/logout",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "REGRESSION TESTING",
+			"item": [
+				{
+					"name": "LOGIN MODULE",
+					"item": [
+						{
+							"name": "LOGIN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"demo1234\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "LOGIN Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"\",\r\n    \"password\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "VERIFY IF USER IS LOGGED IN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "987867869786"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/login",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ACCOUNTS MODULE",
+					"item": [
+						{
+							"name": "GET ACCOUNTS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "9789675"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET ACCOUNT SPECIFIC DETAILS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "89785675467"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GET LAST 10 TRANSACTIONS",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "098986567456789"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "98785687"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-01-01\",\r\n    \"endDate\": \"2024-09-17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "YW5OdGFYUm86WkdWdGJ6RXlNelE9OhNtPxM/Ij8="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"abcd\": \"\",\r\n    \"xyz\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSACTIONS BETWEEN 2 DATES Copy 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "YW5OdGFYUm86WkdWdGJ6RXlNelE9OhNtPxM/Ij8="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"startDate\": \"2024-02-02\",\r\n    \"endDate\": \"2024-01-11\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/account/800002/transactions",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"account",
+										"800002",
+										"transactions"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "TRANSFER MODULE",
+					"item": [
+						{
+							"name": "TRANSFER AMOUNT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 500\", function () {\r",
+											"    pm.response.to.have.status(500);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "YW5OdGFYUm86WkdWdGJ6RXlNelE9OmRGAz8hPyc="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSFER AMOUNT Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 500\", function () {\r",
+											"    pm.response.to.have.status(500);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "YW5OdGFYUm86WkdWdGJ6RXlNelE9OmRGAz8hPyc="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"\",\r\n    \"fromAccount\": \"\",\r\n    \"transferAmount\": \"1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "TRANSFER AMOUNT Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "YW5OdGFYUm86WkdWdGJ6RXlNelE9OmRGAz8hPyc="
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"toAccount\": \"800002\",\r\n    \"fromAccount\": \"800003\",\r\n    \"transferAmount\": \"-1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/transfer",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"transfer"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "FEEDBACK MODULE",
+					"item": [
+						{
+							"name": "SUBMIT FEEDBACK",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "97856757",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Kiran\",\r\n    \"email\": \"kiran@altoromutual.com\",\r\n    \"subject\": \"Money transfer\",\r\n    \"message\": \"The transfer process is real quick and a nice feature\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "SUBMIT FEEDBACK Copy",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "97856757",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"\",\r\n    \"email\": \"\",\r\n    \"subject\": \"\",\r\n    \"message\": \"\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/feedback/submit",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"feedback",
+										"submit"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "ADMIN MODULE",
+					"item": [
+						{
+							"name": "ADD NEW USER",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "89767654678"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"firstname\": \"Shiva\",\r\n    \"lastname\": \"Vishnu\",\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"S3l3ctS0methingStr0ng5AsP@ssword\",\r\n    \"password2\": \"S3l3ctS0methingStr0ng5AsP@ssword\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/addUser",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"addUser"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CHANGE PASSWORD",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "0987856578"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"shiva_vishnu\",\r\n    \"password1\": \"Admin!23\",\r\n    \"password2\": \"Admin!23\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://testfire.net/api/admin/changePassword",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"admin",
+										"changePassword"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LOGOUT MODULE",
+					"item": [
+						{
+							"name": "LOGOUT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});"
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "897676565789",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "http://testfire.net/api/logout",
+									"protocol": "http",
+									"host": [
+										"testfire",
+										"net"
+									],
+									"path": [
+										"api",
+										"logout"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

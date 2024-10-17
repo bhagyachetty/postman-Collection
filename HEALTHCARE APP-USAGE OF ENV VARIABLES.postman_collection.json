@@ -1,0 +1,431 @@
+{
+	"info": {
+		"_postman_id": "c4c74a17-29af-4699-8c7c-e310a990b836",
+		"name": "HEALTHCARE APP-USAGE OF ENV VARIABLES",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5040522",
+		"_collection_link": "https://kiranmm.postman.co/workspace/9PM-BATCH~4adf4ee7-9b42-4d28-9f7f-942f3a3a75ad/collection/5040522-c4c74a17-29af-4699-8c7c-e310a990b836?action=share&source=collection_link&creator=5040522"
+	},
+	"item": [
+		{
+			"name": "LOGIN API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify if response code from server is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response time from server < 2 sec\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response body is received from server\", function () {\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Verify if response headers do not reveal project specific details\", function () {\r",
+							"    pm.response.to.not.have.header(\"server\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// DELETE ENV VARIABLES\r",
+							"\r",
+							"pm.environment.unset(\"envUN\");\r",
+							"pm.environment.unset(\"envPWD\");\r",
+							"\r",
+							"// CREATE ENV VARIABLES\r",
+							"\r",
+							"pm.environment.set(\"envUN\", \"John Doe\");\r",
+							"pm.environment.set(\"envPWD\", \"ThisIsNotAPassword\");\r",
+							"\r",
+							"// READ ENV VARIABLES\r",
+							"\r",
+							"console.log(\"The value of envUN is \"+pm.environment.get(\"envUN\"));\r",
+							"console.log(\"The value of envPWD is \"+pm.environment.get(\"envPWD\"));"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.9"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "max-age=0"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Cookie",
+						"value": "PHPSESSID=s17qlkqj91nobvi1psmkb9pod0tgj6od"
+					},
+					{
+						"key": "Origin",
+						"value": "https://katalon-demo-cura.herokuapp.com"
+					},
+					{
+						"key": "Referer",
+						"value": "https://katalon-demo-cura.herokuapp.com/profile.php"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "document"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "navigate"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-origin"
+					},
+					{
+						"key": "Sec-Fetch-User",
+						"value": "?1"
+					},
+					{
+						"key": "Upgrade-Insecure-Requests",
+						"value": "1"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "{{envUN}}",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "{{envPWD}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://katalon-demo-cura.herokuapp.com/authenticate.php",
+					"protocol": "https",
+					"host": [
+						"katalon-demo-cura",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"authenticate.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "BOOK AN APPOINTMENT-API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify if response code from server is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response time from server < 2 sec\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response body is received from server\", function () {\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Verify if response headers do not reveal project specific details\", function () {\r",
+							"    pm.response.to.not.have.header(\"server\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.9"
+					},
+					{
+						"key": "Cache-Control",
+						"value": "max-age=0"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded"
+					},
+					{
+						"key": "Cookie",
+						"value": "PHPSESSID=s17qlkqj91nobvi1psmkb9pod0tgj6od"
+					},
+					{
+						"key": "Origin",
+						"value": "https://katalon-demo-cura.herokuapp.com"
+					},
+					{
+						"key": "Referer",
+						"value": "https://katalon-demo-cura.herokuapp.com/"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "document"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "navigate"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-origin"
+					},
+					{
+						"key": "Sec-Fetch-User",
+						"value": "?1"
+					},
+					{
+						"key": "Upgrade-Insecure-Requests",
+						"value": "1"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "facility",
+							"value": "{{envFacility}}",
+							"type": "text"
+						},
+						{
+							"key": "hospital_readmission",
+							"value": "{{envHospitalAdmission}}",
+							"type": "text"
+						},
+						{
+							"key": "programs",
+							"value": "{{envInsurance}}",
+							"type": "text"
+						},
+						{
+							"key": "visit_date",
+							"value": "{{envVisitDate}}",
+							"type": "text"
+						},
+						{
+							"key": "comment",
+							"value": "{{envComment}}",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://katalon-demo-cura.herokuapp.com/appointment.php",
+					"protocol": "https",
+					"host": [
+						"katalon-demo-cura",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"appointment.php"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LOGOUT API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Verify if response code from server is 200 OK\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.response.to.have.status(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response time from server < 2 sec\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Verify if response body is received from server\", function () {\r",
+							"    pm.response.to.have.body();\r",
+							"});\r",
+							"\r",
+							"pm.test.skip(\"Verify if response headers do not reveal project specific details\", function () {\r",
+							"    pm.response.to.not.have.header(\"server\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+					},
+					{
+						"key": "Accept-Language",
+						"value": "en-US,en;q=0.9"
+					},
+					{
+						"key": "Connection",
+						"value": "keep-alive"
+					},
+					{
+						"key": "Cookie",
+						"value": "PHPSESSID=s17qlkqj91nobvi1psmkb9pod0tgj6od"
+					},
+					{
+						"key": "Referer",
+						"value": "https://katalon-demo-cura.herokuapp.com/appointment.php"
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": "document"
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": "navigate"
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": "same-origin"
+					},
+					{
+						"key": "Sec-Fetch-User",
+						"value": "?1"
+					},
+					{
+						"key": "Upgrade-Insecure-Requests",
+						"value": "1"
+					},
+					{
+						"key": "User-Agent",
+						"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": "\"Chromium\";v=\"128\", \"Not;A=Brand\";v=\"24\", \"Google Chrome\";v=\"128\""
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": "?0"
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": "\"Windows\""
+					}
+				],
+				"url": {
+					"raw": "https://katalon-demo-cura.herokuapp.com/authenticate.php?logout",
+					"protocol": "https",
+					"host": [
+						"katalon-demo-cura",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"authenticate.php"
+					],
+					"query": [
+						{
+							"key": "logout",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
